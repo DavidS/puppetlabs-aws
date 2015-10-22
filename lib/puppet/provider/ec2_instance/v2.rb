@@ -107,11 +107,13 @@ Puppet::Type.type(:ec2_instance).provide(:v2, :parent => PuppetX::Puppetlabs::Aw
 
   def running?
     Puppet.info("Checking if instance #{name} is running in region #{target_region}")
+    Puppet.debug("Current state of instance #{name} in region #{target_region} is: #{@property_hash[:ensure].inspect}")
     [:present, :pending, :running].include? @property_hash[:ensure]
   end
 
   def stopped?
     Puppet.info("Checking if instance #{name} is stopped in region #{target_region}")
+    Puppet.debug("Current state of instance #{name} in region #{target_region} is: #{@property_hash[:ensure].inspect}")
     [:stopping, :stopped].include? @property_hash[:ensure]
   end
 
