@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+# Add the following two lines to lib/puppet/feature/aws.rb to enable http tracing on the AWS calls:
+# require 'aws-sdk-core'
+# Aws.config[:http_wire_trace] = true
+
+mkdir -p tmp
+rm -f tmp/resources
+
+for i in $(find lib/puppet/type -type f | grep -v iam_); do
+    type="$(basename "$i" .rb)"
+    echo -n "Listing $type: "
+    echo -n $(bundle exec puppet resource --libdir=lib "$type" | tee -a tmp/resources | grep -E 'GET|POST' | wc -l)
+    echo " queries"
+done
